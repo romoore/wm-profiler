@@ -1,0 +1,13 @@
+# Java output
+bin
+target
+*.class
+
+# Eclipse
+.classpath
+.settings
+.project
+
+# Logs
+*.log
+logs
