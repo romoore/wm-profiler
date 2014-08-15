@@ -2,8 +2,6 @@ package com.owlplatform.wmprofile;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.owlplatform.worldmodel.client.ClientWorldConnection;
@@ -12,17 +10,6 @@ import com.owlplatform.worldmodel.client.WorldState;
 
 public class Receiver {
 
-	private static final Random RAND = new Random(System.currentTimeMillis());
-	private static final String ORIGIN_STRING = "PROFILER";
-	private static final String ATTRIBUTE_FORMAT = "a%05d";
-	private static final String COUNT_FORMAT = "%,11d";
-	private static final String TIME_FORMAT = "%,15d";
-	private static final int SEARCH_ITERATIONS = 10;
-
-	private static final String REGEX_PATTERN_SIMPLE = ".*";
-	private static final String REGEX_PATTERN_MEDIUM = "^(.*?[a-z])(.*[0-9]){8}9";
-	private static final String REGEX_PATTERN_COMPLEX = "(([^\\.]*))*1";
-	private static final String REGEX_PATTERN_COMPLEX_HI_EMPTY = "(([^\\.]*))*p";
 
 	public static void main(String[] args) {
 		final String host = args[0];
