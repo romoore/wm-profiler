@@ -16,7 +16,7 @@
 	<!--  Control logging verbosity for a specific package or class -->
 	
   <logger name="com.owlplatform">
-    <level value="debug" />
+    <level value="warn" />
   </logger>
   <logger name="org.apache">
     <level value="warn" />
