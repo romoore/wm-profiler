@@ -249,7 +249,6 @@ public class Main {
 				for (int i = 0; i < 20; ++i) {
 					final long end05Snap = (long) ((latestTime - earliestTime) * (.025 + (i / 20.0)))
 							+ earliestTime;
-					System.out.println((end05Snap - earliestTime));
 					final long start = System.nanoTime();
 					WorldState state = null;
 					try {
