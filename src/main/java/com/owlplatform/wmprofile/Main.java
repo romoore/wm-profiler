@@ -36,6 +36,7 @@ public class Main {
 		int numAttributes = 0;
 		int numAttrPerId = 1;
 		boolean expire = false;
+		boolean individual = false;
 
 		for (int i = 3; i < args.length; ++i) {
 			if ("--createAttributes".equalsIgnoreCase(args[i])) {
@@ -49,6 +50,8 @@ public class Main {
 			} else if ("--expire".equalsIgnoreCase(args[i])) {
 				expire = true;
 				System.out.println("Expiring attributes.");
+			} else if ("--individual".equalsIgnoreCase(args[i])) {
+				individual = true;
 			}
 		}
 		final SolverWorldConnection swc = new SolverWorldConnection();
@@ -88,25 +91,26 @@ public class Main {
 				final ArrayList<Attribute> attrs = genAttributes(numAttributes,
 						1, earliestTime, expire);
 
+				if (individual) {
+					final long startCreateInd = System.nanoTime();
+					for (int i = 0; i < numAttributes; ++i) {
+						swc.updateAttribute(attrs.get(i));
+					}
+					final long endCreateInd = System.nanoTime();
+
+					System.out.println(String.format("CI(" + COUNT_FORMAT
+							+ "): " + TIME_FORMAT, numAttributes,
+							(endCreateInd - startCreateInd)));
+					return;
+				}
+
 				final long startCreateAll = System.nanoTime();
 				swc.updateAttributes(attrs);
 				final long endCreateAll = System.nanoTime();
-				for (final Attribute a : attrs) {
-					swc.delete(a.getId(), a.getAttributeName());
-				}
-				final long endDeleteInd = System.nanoTime();
-				for (int i = 0; i < numAttributes; ++i) {
-					swc.updateAttribute(attrs.get(i));
-				}
-				final long endCreateInd = System.nanoTime();
 
 				System.out.println(String.format("CA(" + COUNT_FORMAT + "): "
-						+ TIME_FORMAT + "\nDI(" + COUNT_FORMAT + "): "
-						+ TIME_FORMAT + "\nCI(" + COUNT_FORMAT + "): "
 						+ TIME_FORMAT, numAttributes,
-						(endCreateAll - startCreateAll), numAttributes,
-						(endDeleteInd - endCreateAll), numAttributes,
-						(endCreateInd - endDeleteInd)));
+						(endCreateAll - startCreateAll)));
 
 				if (expire) {
 					System.out.println("Expiring attributes");
@@ -261,15 +265,15 @@ public class Main {
 					final long end = System.nanoTime();
 					int count = 0;
 					if (null != state) {
-						for(String id : state.getIdentifiers()){
+						for (String id : state.getIdentifiers()) {
 							Collection<Attribute> as = state.getState(id);
 							count += as.size();
 						}
 					}
 
-					System.out.println(String.format("S/%2.1f("
-							+ COUNT_FORMAT + "): " + TIME_FORMAT, 2.5 + 5 * i,
-							count, (end - start)));
+					System.out.println(String.format("S/%2.1f(" + COUNT_FORMAT
+							+ "): " + TIME_FORMAT, 2.5 + 5 * i, count,
+							(end - start)));
 
 				}
 
@@ -342,6 +346,23 @@ public class Main {
 					System.out.println(String.format("Rx/C_(" + COUNT_FORMAT
 							+ "): " + TIME_FORMAT, count, (end - start)));
 				}
+
+				System.out.println("Sleeping 1 seconds");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException ie) {
+					// Ignored
+				}
+
+				final long startDeleteInd = System.nanoTime();
+				for (final Attribute a : attrs) {
+					swc.delete(a.getId(), a.getAttributeName());
+				}
+				final long endDeleteInd = System.nanoTime();
+				System.out.println(String.format("DI(" + COUNT_FORMAT + "): "
+						+ TIME_FORMAT, numAttributes,
+						(endDeleteInd - startDeleteInd)));
+				return;
 
 			}
 		} finally {
