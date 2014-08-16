@@ -28,6 +28,7 @@ public class Main {
 	private static final String REGEX_PATTERN_COMPLEX = "(([^\\.]*))*1";
 	private static final String REGEX_PATTERN_COMPLEX_HI_EMPTY = "(([^\\.]*))*p";
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		final String host = args[0];
 		final int sPort = Integer.parseInt(args[1]);
@@ -104,14 +105,46 @@ public class Main {
 					return;
 				}
 
-				final long startCreateAll = System.nanoTime();
-				swc.updateAttributes(attrs);
-				final long endCreateAll = System.nanoTime();
+				// Break-up into messages of 1M or fewer
+				final int MAX_ATTR_MESSAGE = 1000000;
+				if (numAttributes > MAX_ATTR_MESSAGE) {
+					int numMessages = (int) Math.ceil(numAttributes
+							/ (float) MAX_ATTR_MESSAGE);
+					int lastArray = numAttributes % MAX_ATTR_MESSAGE;
 
-				System.out.println(String.format("CA(" + COUNT_FORMAT + "): "
-						+ TIME_FORMAT, numAttributes,
-						(endCreateAll - startCreateAll)));
+					ArrayList[] attrArr = new ArrayList[numMessages];
+					for (int i = 0; i < numMessages - 1; ++i) {
+						attrArr[i] = new ArrayList<Attribute>();
+						((ArrayList<Attribute>) attrArr[i]).addAll(attrs
+								.subList(i * MAX_ATTR_MESSAGE, (i + 1)
+										* MAX_ATTR_MESSAGE));
+					}
+					attrArr[numMessages - 1] = new ArrayList<Attribute>();
+					((ArrayList<Attribute>) attrArr[numMessages - 1])
+							.addAll(attrs.subList((numMessages - 1)
+									* MAX_ATTR_MESSAGE,
+									((numMessages - 1) * MAX_ATTR_MESSAGE)
+											+ lastArray));
 
+					final long startCreateAll = System.nanoTime();
+					for (int i = 0; i < attrArr.length; ++i) {
+						swc.updateAttributes(attrArr[i]);
+					}
+					final long endCreateAll = System.nanoTime();
+
+					System.out.println(String.format("CA(" + COUNT_FORMAT
+							+ "): " + TIME_FORMAT, numAttributes,
+							(endCreateAll - startCreateAll)));
+				} else {
+
+					final long startCreateAll = System.nanoTime();
+					swc.updateAttributes(attrs);
+					final long endCreateAll = System.nanoTime();
+
+					System.out.println(String.format("CA(" + COUNT_FORMAT
+							+ "): " + TIME_FORMAT, numAttributes,
+							(endCreateAll - startCreateAll)));
+				}
 				if (expire) {
 					System.out.println("Expiring attributes");
 					for (Attribute a : attrs) {
