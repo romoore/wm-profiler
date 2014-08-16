@@ -153,9 +153,9 @@ public class Main {
 					}
 				}
 
-				System.out.println("Sleeping 5 seconds");
+				System.out.println("Sleeping 30 seconds");
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(30000);
 				} catch (InterruptedException ie) {
 					// Ignored
 				}
