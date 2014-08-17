@@ -111,6 +111,9 @@ public class Main {
 					int numMessages = (int) Math.ceil(numAttributes
 							/ (float) MAX_ATTR_MESSAGE);
 					int lastArray = numAttributes % MAX_ATTR_MESSAGE;
+					if(lastArray == 0){
+						lastArray = MAX_ATTR_MESSAGE;
+					}
 
 					ArrayList[] attrArr = new ArrayList[numMessages];
 					for (int i = 0; i < numMessages - 1; ++i) {
