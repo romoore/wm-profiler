@@ -106,7 +106,7 @@ public class Main {
 				}
 
 				// Break-up into messages of 1M or fewer
-				final int MAX_ATTR_MESSAGE = 1000000;
+				final int MAX_ATTR_MESSAGE = 100000;
 				if (numAttributes > MAX_ATTR_MESSAGE) {
 					int numMessages = (int) Math.ceil(numAttributes
 							/ (float) MAX_ATTR_MESSAGE);
