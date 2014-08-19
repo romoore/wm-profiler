@@ -50,7 +50,6 @@ public class Main {
 				numAttributes = Integer.parseInt(args[++i]);
 			} else if ("--expire".equalsIgnoreCase(args[i])) {
 				expire = true;
-				System.out.println("Expiring attributes.");
 			} else if ("--individual".equalsIgnoreCase(args[i])) {
 				individual = true;
 			}
@@ -149,7 +148,7 @@ public class Main {
 							(endCreateAll - startCreateAll)));
 				}
 				
-				int sleepSeconds = 20*(int)Math.ceil(numAttributes/100000);
+				int sleepSeconds = 25*(int)Math.ceil(numAttributes/100000);
 				
 				System.out.println("Sleeping " + sleepSeconds + " seconds");
 				try {
