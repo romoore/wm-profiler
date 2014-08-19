@@ -132,14 +132,6 @@ public class Main {
 					final long startCreateAll = System.nanoTime();
 					for (int i = 0; i < attrArr.length; ++i) {
 						swc.updateAttributes(attrArr[i]);
-						int sleepSeconds = 20;
-						
-						System.out.println("Sleeping " + sleepSeconds + " seconds");
-						try {
-							Thread.sleep(sleepSeconds*1000);
-						} catch (InterruptedException ie) {
-							// Ignored
-						}
 					}
 					final long endCreateAll = System.nanoTime();
 
@@ -155,17 +147,16 @@ public class Main {
 					System.out.println(String.format("CA(" + COUNT_FORMAT
 							+ "): " + TIME_FORMAT, numAttributes,
 							(endCreateAll - startCreateAll)));
-					int sleepSeconds = 20*(int)Math.ceil(numAttributes/100000);
-					
-					System.out.println("Sleeping " + sleepSeconds + " seconds");
-					try {
-						Thread.sleep(sleepSeconds*1000);
-					} catch (InterruptedException ie) {
-						// Ignored
-					}
 				}
 				
+				int sleepSeconds = 20*(int)Math.ceil(numAttributes/100000);
 				
+				System.out.println("Sleeping " + sleepSeconds + " seconds");
+				try {
+					Thread.sleep(sleepSeconds*1000);
+				} catch (InterruptedException ie) {
+					// Ignored
+				}
 				if (expire) {
 					System.out.println("Expiring attributes");
 					for (Attribute a : attrs) {
