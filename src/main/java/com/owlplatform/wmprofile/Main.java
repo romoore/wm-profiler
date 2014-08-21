@@ -97,6 +97,8 @@ public class Main {
 				return;
 			}
 
+			final long startProfile = System.currentTimeMillis();
+			
 			if (numAttributes > 0) {
 
 				final Calendar cal = Calendar.getInstance();
@@ -120,6 +122,8 @@ public class Main {
 					return;
 				}
 
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+				
 				// Break-up into messages of 1M or fewer
 				final int MAX_ATTR_MESSAGE = 100000;
 				if (numAttributes > MAX_ATTR_MESSAGE) {
@@ -163,7 +167,7 @@ public class Main {
 							+ "): " + TIME_FORMAT, numAttributes,
 							(endCreateAll - startCreateAll)));
 				}
-				
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
 				int sleepSeconds = (int)((insertDelay * numAttributes)/1000000);
 				
 				System.out.println("Sleeping " + sleepSeconds + " seconds");
@@ -178,14 +182,17 @@ public class Main {
 						swc.expire(a.getId(), a.getExpirationDate(),
 								a.getAttributeName());
 					}
+					System.out.println("Sleeping 30 seconds");
+					try {
+						Thread.sleep(30000);
+					} catch (InterruptedException ie) {
+						// Ignored
+					}
 				}
 
-				System.out.println("Sleeping 30 seconds");
-				try {
-					Thread.sleep(30000);
-				} catch (InterruptedException ie) {
-					// Ignored
-				}
+				
+				
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
 
 				// Select entire range
 				final long startEntireRange = System.nanoTime();
@@ -197,7 +204,9 @@ public class Main {
 				final long endEntireRange = System.nanoTime();
 				System.out.println(String.format("RA: " + TIME_FORMAT,
 						(endEntireRange - startEntireRange)));
-
+				
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+				
 				long startTenPct = earliestTime;
 				// Now select 10% at a time
 				for (int i = 1; i < 11; ++i) {
@@ -227,7 +236,9 @@ public class Main {
 
 					startTenPct = endTenPct;
 				}
-
+				
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+				
 				System.out.println("Sleeping 1 second");
 				try {
 					Thread.sleep(1000);
@@ -265,6 +276,8 @@ public class Main {
 
 				}
 
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+				
 				System.out.println("Sleeping 1 second");
 				try {
 					Thread.sleep(1000);
@@ -302,6 +315,8 @@ public class Main {
 
 				}
 
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+				
 				// Now snapshots at 5% steps, starting from 2.5% -> 97.5%
 				System.out.println("Sleeping 1 second");
 				try {
@@ -336,7 +351,9 @@ public class Main {
 							(end - start)));
 
 				}
-
+				
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+				
 				// Now URI search
 				System.out.println("Sleeping 1 second");
 				try {
@@ -353,6 +370,8 @@ public class Main {
 					System.out.println(String.format("Rx/S(" + COUNT_FORMAT
 							+ "): " + TIME_FORMAT, ids.length, (end - start)));
 				}
+				
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
 
 				System.out.println("Sleeping 1 seconds");
 				try {
@@ -370,6 +389,8 @@ public class Main {
 							+ "): " + TIME_FORMAT, ids.length, (end - start)));
 				}
 
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+				
 				System.out.println("Sleeping 1 seconds");
 				try {
 					Thread.sleep(1000);
@@ -386,6 +407,8 @@ public class Main {
 							+ "): " + TIME_FORMAT, ids.length, (end - start)));
 				}
 
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+				
 				System.out.println("Sleeping 1 seconds");
 				try {
 					Thread.sleep(1000);
@@ -407,6 +430,8 @@ public class Main {
 							+ "): " + TIME_FORMAT, count, (end - start)));
 				}
 
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+				
 				System.out.println("Sleeping 1 seconds");
 				try {
 					Thread.sleep(1000);
@@ -422,6 +447,9 @@ public class Main {
 				System.out.println(String.format("DI(" + COUNT_FORMAT + "): "
 						+ TIME_FORMAT, numAttributes,
 						(endDeleteInd - startDeleteInd)));
+				
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+				
 				return;
 
 			}
