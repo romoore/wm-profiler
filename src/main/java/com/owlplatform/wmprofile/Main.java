@@ -128,6 +128,17 @@ public class Main {
 					System.out.println(String.format("CI(" + COUNT_FORMAT
 							+ "): " + TIME_FORMAT, numAttributes,
 							(endCreateInd - startCreateInd)));
+					
+					System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+					int sleepSeconds = (int)((insertDelay * numAttributes)/1000000);
+					
+					System.out.println("Sleeping " + sleepSeconds + " seconds");
+					try {
+						Thread.sleep(sleepSeconds*1000);
+					} catch (InterruptedException ie) {
+						// Ignored
+					}
+					
 					return;
 				}
 
