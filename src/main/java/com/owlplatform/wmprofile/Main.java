@@ -30,6 +30,12 @@ public class Main {
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
+		if(args.length < 3){
+			printUsage();
+			System.exit(1);
+		}
+		
+		
 		final String host = args[0];
 		final int sPort = Integer.parseInt(args[1]);
 		final int cPort = Integer.parseInt(args[2]);
@@ -38,7 +44,9 @@ public class Main {
 		int numAttrPerId = 1;
 		boolean expire = false;
 		boolean individual = false;
-
+		// How long each attribute takes to insert, in microseconds
+		long insertDelay = 500;
+		
 		for (int i = 3; i < args.length; ++i) {
 			if ("--createAttributes".equalsIgnoreCase(args[i])) {
 				if ((i + 1) >= args.length) {
@@ -52,6 +60,14 @@ public class Main {
 				expire = true;
 			} else if ("--individual".equalsIgnoreCase(args[i])) {
 				individual = true;
+			} else if ("--insertDelay".equalsIgnoreCase(args[i])){
+				if ((i + 1) >= args.length) {
+					System.err
+							.println("Missing argument for \"insertDelay\" argument.");
+					printUsage();
+					return;
+				}
+				insertDelay = Long.parseLong(args[++i]);
 			}
 		}
 		final SolverWorldConnection swc = new SolverWorldConnection();
@@ -148,7 +164,7 @@ public class Main {
 							(endCreateAll - startCreateAll)));
 				}
 				
-				int sleepSeconds = 25*(int)Math.ceil(numAttributes/100000);
+				int sleepSeconds = (int)((insertDelay * numAttributes)/1000000);
 				
 				System.out.println("Sleeping " + sleepSeconds + " seconds");
 				try {
@@ -418,7 +434,7 @@ public class Main {
 
 	public static void printUsage() {
 		System.err
-				.println("<WM HOST> <SOLVER PORT> <CLIENT PORT> [--createAttributes <NUM ATTRS>] [--expire]");
+				.println("<WM HOST> <SOLVER PORT> <CLIENT PORT> [--createAttributes <NUM ATTRS>] [--expire] [--individual] [--insertDelay <DELAY>]");
 	}
 
 	public static ArrayList<Attribute> genAttributes(int idCount,
