@@ -349,7 +349,7 @@ public class Main {
 					System.out.println(String.format("S/%2.1f(" + COUNT_FORMAT
 							+ "): " + TIME_FORMAT, 2.5 + 5 * i, count,
 							(end - start)));
-
+					System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
 				}
 				
 				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
