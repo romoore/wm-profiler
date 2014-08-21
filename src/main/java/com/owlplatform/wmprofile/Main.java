@@ -46,6 +46,7 @@ public class Main {
 		boolean individual = false;
 		// How long each attribute takes to insert, in microseconds
 		long insertDelay = 500;
+		long expireDelay = 3000;
 		
 		for (int i = 3; i < args.length; ++i) {
 			if ("--createAttributes".equalsIgnoreCase(args[i])) {
@@ -182,9 +183,12 @@ public class Main {
 						swc.expire(a.getId(), a.getExpirationDate(),
 								a.getAttributeName());
 					}
-					System.out.println("Sleeping 30 seconds");
+					
+					sleepSeconds = (int)((expireDelay * numAttributes)/1000000);
+					
+					System.out.println("Sleeping " + sleepSeconds + " seconds");
 					try {
-						Thread.sleep(30000);
+						Thread.sleep(sleepSeconds*1000);
 					} catch (InterruptedException ie) {
 						// Ignored
 					}
