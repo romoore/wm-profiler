@@ -69,6 +69,14 @@ public class Main {
 					return;
 				}
 				insertDelay = Long.parseLong(args[++i]);
+			}else if ("--expireDelay".equalsIgnoreCase(args[i])){
+				if ((i + 1) >= args.length) {
+					System.err
+							.println("Missing argument for \"expireDelay\" argument.");
+					printUsage();
+					return;
+				}
+				expireDelay = Long.parseLong(args[++i]);
 			}
 		}
 		final SolverWorldConnection swc = new SolverWorldConnection();
