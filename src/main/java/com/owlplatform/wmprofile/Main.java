@@ -47,6 +47,7 @@ public class Main {
 		// How long each attribute takes to insert, in microseconds
 		long insertDelay = 500;
 		long expireDelay = 3000;
+		long deleteDelay = 3000;
 		
 		for (int i = 3; i < args.length; ++i) {
 			if ("--createAttributes".equalsIgnoreCase(args[i])) {
@@ -77,6 +78,14 @@ public class Main {
 					return;
 				}
 				expireDelay = Long.parseLong(args[++i]);
+			}else if ("--deleteDelay".equalsIgnoreCase(args[i])){
+				if ((i + 1) >= args.length) {
+					System.err
+							.println("Missing argument for \"deleteDelay\" argument.");
+					printUsage();
+					return;
+				}
+				deleteDelay = Long.parseLong(args[++i]);
 			}
 		}
 		final SolverWorldConnection swc = new SolverWorldConnection();
@@ -470,6 +479,16 @@ public class Main {
 				System.out.println(String.format("DI(" + COUNT_FORMAT + "): "
 						+ TIME_FORMAT, numAttributes,
 						(endDeleteInd - startDeleteInd)));
+				
+				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
+				int deleteSeconds = (int)((deleteDelay * numAttributes)/1000000);
+				
+				System.out.println("Sleeping " + deleteSeconds + " seconds");
+				try {
+					Thread.sleep(deleteSeconds*1000);
+				} catch (InterruptedException ie) {
+					// Ignored
+				}
 				
 				System.out.println(String.format("TIME: %5d seconds",(System.currentTimeMillis()-startProfile)/1000));
 				
